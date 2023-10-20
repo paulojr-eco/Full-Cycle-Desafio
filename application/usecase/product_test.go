@@ -33,6 +33,18 @@ func TestUseCase_AddProduct(t *testing.T) {
 	require.NotNil(t, product.UpdatedAt)
 }
 
+/* Should return an empty array if there is no products */
+func TestUseCase_FindZeroProducts(t *testing.T) {
+	database, _ := db.ConnectDB()
+	productRepository := repository.ProductRepositoryDb{Db: database}
+	productUseCase := usecase.ProductUseCase{ProductRepository: productRepository}
+
+	products := productUseCase.ProductRepository.FindProducts()
+
+	require.NotNil(t, products)
+	require.Equal(t, len(*products), 0)
+}
+
 /* Should return an array with a product on success */
 func TestUseCase_FindProducts(t *testing.T) {
 	name := "Product 01"

@@ -7,6 +7,11 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+type ProductRepositoryInterface interface {
+	AddProduct(product *Product) (*Product, error)
+	FindProducts() *[]Product
+}
+
 type Product struct {
 	Base        `valid:"required"`
 	Name        string  `json:"name" gorm:"type:varchar(50);not null" valid:"notnull"`

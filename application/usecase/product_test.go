@@ -32,3 +32,20 @@ func TestUseCase_AddProduct(t *testing.T) {
 	require.NotNil(t, product.CreatedAt)
 	require.NotNil(t, product.UpdatedAt)
 }
+
+/* Should return an array with a product on success */
+func TestUseCase_FindProducts(t *testing.T) {
+	name := "Product 01"
+	description := "Description from product 01"
+	price := 15.99
+	database, _ := db.ConnectDB()
+	productRepository := repository.ProductRepositoryDb{Db: database}
+	productUseCase := usecase.ProductUseCase{ProductRepository: productRepository}
+
+	product, _ := model.NewProduct(name, description, price)
+	productUseCase.ProductRepository.AddProduct(product)
+	products := productUseCase.ProductRepository.FindProducts()
+
+	require.NotNil(t, products)
+	require.Equal(t, len(*products), 1)
+}

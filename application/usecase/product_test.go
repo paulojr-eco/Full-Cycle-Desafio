@@ -7,7 +7,6 @@ import (
 	"github.com/paulojr-eco/full-cycle-desafio/domain/model"
 	"github.com/paulojr-eco/full-cycle-desafio/infra/db"
 	"github.com/paulojr-eco/full-cycle-desafio/infra/repository"
-	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,7 +14,7 @@ import (
 func TestUseCase_AddProduct(t *testing.T) {
 	name := "Product 01"
 	description := "Description from product 01"
-	price := 15.99
+	price := float32(15.99)
 	database, _ := db.ConnectDB()
 	productRepository := repository.ProductRepositoryDb{Db: database}
 	productUseCase := usecase.ProductUseCase{ProductRepository: productRepository}
@@ -25,7 +24,7 @@ func TestUseCase_AddProduct(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotNil(t, product)
-	require.NotEmpty(t, uuid.FromStringOrNil(product.ID))
+	require.NotEmpty(t, product.ID)
 	require.Equal(t, product.Name, name)
 	require.Equal(t, product.Description, description)
 	require.Equal(t, product.Price, price)
@@ -49,7 +48,7 @@ func TestUseCase_FindZeroProducts(t *testing.T) {
 func TestUseCase_FindProducts(t *testing.T) {
 	name := "Product 01"
 	description := "Description from product 01"
-	price := 15.99
+	price := float32(15.99)
 	database, _ := db.ConnectDB()
 	productRepository := repository.ProductRepositoryDb{Db: database}
 	productUseCase := usecase.ProductUseCase{ProductRepository: productRepository}

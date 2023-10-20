@@ -13,7 +13,7 @@ import (
 func TestRepository_AddProduct(t *testing.T) {
 	name := "Product 01"
 	description := "Description from product 01"
-	price := 15.99
+	price := float32(15.99)
 	product, _ := model.NewProduct(name, description, price)
 	database, _ := db.ConnectDB()
 
@@ -38,7 +38,7 @@ func TestRepository_FindZeroProducts(t *testing.T) {
 func TestRepository_FindProducts(t *testing.T) {
 	name := "Product 01"
 	description := "Description from product 01"
-	price := 15.99
+	price := float32(15.99)
 	product, _ := model.NewProduct(name, description, price)
 	database, _ := db.ConnectDB()
 

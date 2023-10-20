@@ -1,6 +1,7 @@
 package model
 
 import (
+	"hash/fnv"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -16,7 +17,7 @@ type Product struct {
 	Base        `valid:"required"`
 	Name        string  `json:"name" gorm:"type:varchar(50);not null" valid:"notnull"`
 	Description string  `json:"description" gorm:"type:varchar(255);not null" valid:"notnull"`
-	Price       float64 `json:"price" gorm:"type:float" valid:"notnull"`
+	Price       float32 `json:"price" gorm:"type:float" valid:"notnull"`
 }
 
 func (product *Product) isValid() error {
@@ -28,14 +29,17 @@ func (product *Product) isValid() error {
 	return nil
 }
 
-func NewProduct(name string, description string, price float64) (*Product, error) {
+func NewProduct(name string, description string, price float32) (*Product, error) {
 	product := Product{
 		Name:        name,
 		Description: description,
 		Price:       price,
 	}
 
-	product.ID = uuid.NewV4().String()
+	uuid := uuid.NewV4().String()
+	hash := fnv.New32a()
+	hash.Write([]byte(uuid))
+	product.ID = int32(hash.Sum32())
 	product.CreatedAt = time.Now()
 
 	err := product.isValid()

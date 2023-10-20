@@ -1,16 +1,46 @@
 package model
 
 import (
-	"hash/fnv"
+	"log"
+	"math"
+	"sync"
 	"time"
 
 	"github.com/asaskevich/govalidator"
-	uuid "github.com/satori/go.uuid"
 )
 
 type ProductRepositoryInterface interface {
 	AddProduct(product *Product) (*Product, error)
 	FindProducts() *[]Product
+}
+
+type Counter struct {
+	counter int32
+}
+
+var (
+	instance *Counter
+	once     sync.Once
+)
+
+func GetInstance() *Counter {
+	once.Do(func() {
+		instance = &Counter{counter: math.MinInt32}
+	})
+	return instance
+}
+
+func (c *Counter) Increment() int32 {
+	if c.counter == math.MaxInt32 {
+		c.counter = math.MinInt32
+		log.Fatal("exceeded limit of product creation")
+	}
+	c.counter++
+	return c.counter
+}
+
+func (c *Counter) GetValue() int32 {
+	return c.counter
 }
 
 type Product struct {
@@ -36,10 +66,10 @@ func NewProduct(name string, description string, price float32) (*Product, error
 		Price:       price,
 	}
 
-	uuid := uuid.NewV4().String()
-	hash := fnv.New32a()
-	hash.Write([]byte(uuid))
-	product.ID = int32(hash.Sum32())
+	counterSingleton := GetInstance()
+	product.ID = counterSingleton.GetValue()
+	counterSingleton.Increment()
+
 	product.CreatedAt = time.Now()
 
 	err := product.isValid()

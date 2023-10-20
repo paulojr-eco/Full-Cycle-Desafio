@@ -19,3 +19,10 @@ func TestDb_NewWrongConection(t *testing.T) {
 
 	t.Cleanup(func() { os.Setenv("dbType", dbType) })
 }
+
+func TestDb_NewConection(t *testing.T) {
+	database, err := db.ConnectDB()
+
+	require.Nil(t, err)
+	require.NotNil(t, database)
+}

@@ -24,6 +24,16 @@ func TestRepository_AddProduct(t *testing.T) {
 	require.Nil(t, err)
 }
 
+/* Should return an empty array if there is no products */
+func TestRepository_FindZeroProducts(t *testing.T) {
+	database, _ := db.ConnectDB()
+
+	productRepository := repository.ProductRepositoryDb{Db: database}
+	products := productRepository.FindProducts()
+
+	require.Equal(t, len(*products), 0)
+}
+
 /* Should find a product on success */
 func TestRepository_FindProducts(t *testing.T) {
 	name := "Product 01"

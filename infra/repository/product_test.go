@@ -23,3 +23,19 @@ func TestRepository_AddProduct(t *testing.T) {
 	require.NotNil(t, product)
 	require.Nil(t, err)
 }
+
+/* Should find a product on success */
+func TestRepository_FindProducts(t *testing.T) {
+	name := "Product 01"
+	description := "Description from product 01"
+	price := 15.99
+	product, _ := model.NewProduct(name, description, price)
+	database, _ := db.ConnectDB()
+
+	productRepository := repository.ProductRepositoryDb{Db: database}
+	productRepository.AddProduct(product)
+	products := productRepository.FindProducts()
+
+	require.NotNil(t, products)
+	require.Equal(t, len(*products), 1)
+}

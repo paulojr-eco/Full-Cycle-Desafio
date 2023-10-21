@@ -1,8 +1,20 @@
 version: "3"
 
 services:
-  app:
-    build: .
+  golang:
+    build:
+      context: ./golang
+    ports:
+      - 50051:50051
     volumes:
       - ./golang/:/go/src/
     command: bash -c "go run main.go"
+
+  nestjs:
+    build:
+      context: ./nestjs
+    ports:
+      - 3000:3000
+    volumes:
+      - ./nestjs/:/home/node/app
+    command: bash -c "npm run start:dev"

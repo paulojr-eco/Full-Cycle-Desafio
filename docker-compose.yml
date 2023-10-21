@@ -9,6 +9,8 @@ services:
     volumes:
       - ./golang/:/go/src/
     command: bash -c "go run main.go"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   nestjs:
     build:
@@ -18,3 +20,5 @@ services:
     volumes:
       - ./nestjs/:/home/node/app
     command: bash -c "npm run start:dev"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

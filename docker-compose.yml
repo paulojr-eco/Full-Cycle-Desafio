@@ -14,11 +14,11 @@ services:
 
   nestjs:
     build:
-      context: ./nestjs
+      context: ./nest-js
     ports:
       - 3000:3000
     volumes:
-      - ./nestjs/:/home/node/app
+      - ./nest-js/:/home/node/app
     command: bash -c "npm run start:dev"
     extra_hosts:
       - "host.docker.internal:host-gateway"
